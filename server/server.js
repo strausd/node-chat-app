@@ -4,7 +4,7 @@ const socketIO = require("socket.io");
 const express = require("express");
 var app = express();
 
-const {generateMessage} = require("./utils/message");
+const {generateMessage, generateLocationMessage} = require("./utils/message");
 
 var server = http.createServer(app);
 var io = socketIO(server);
@@ -23,12 +23,10 @@ io.on('connection', (socket) => {
         console.log('New message created', message);
         io.emit('newMessage', generateMessage(message.from, message.text));
         callback('This is from the server.');
-        
-        // socket.broadcast.emit('newMessage', {
-        //     from: message.from,
-        //     text: message.text,
-        //     createdAt: new Date().getTime()
-        // });
+    });
+    
+    socket.on('createLocationMessage', (coords) => {
+        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
     });
     
     socket.on('disconnect', () => {
