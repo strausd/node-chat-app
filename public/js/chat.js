@@ -23,10 +23,33 @@ function scrollToBottom () {
 
 socket.on('connect', function() {
     console.log('Connected to server');
+    var params = jQuery.deparam(window.location.search);
+    
+    // Doesn't work with just spaces from window.location.search
+    // var params = JSON.parse('{"' + decodeURI(window.location.search.substring(1).replace(/&/g, "\",\"").replace(/=/g, "\":\"")) + '"}');
+    socket.emit('join', params, function (err) {
+        if (err) {
+            alert(err);
+            window.location.href = '/';
+        } else {
+            console.log('No error');
+        }
+    });
 });
 
 socket.on('disconnect', function() {
     console.log('Disconnected from server');
+});
+
+socket.on('updateUserList', function(users) {
+    var ol = document.createElement('OL');
+    users.forEach((user) => {
+        var li = document.createElement('LI');
+        li.innerHTML = user;
+        ol.appendChild(li);
+    });
+    
+    document.getElementById('users').appendChild(ol);
 });
 
 socket.on('newMessage', function(message) {
