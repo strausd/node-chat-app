@@ -16,7 +16,7 @@ const publicPath = path.join(__dirname, '../public');
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => {
-    console.log('New user connected');
+    console.log('New user connected.');
     
     
     socket.on('join', (params, callback) => {
@@ -53,12 +53,12 @@ io.on('connection', (socket) => {
     });
     
     socket.on('disconnect', () => {
-        var user = users.removeUser(socket.id);
+        var user = users.getUser(socket.id);
         if (user) {
             io.to(user.room).emit('updateUserList', users.getUserList(user.room));
             io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left.`));
         }
-        console.log('User was disconnected');
+        console.log(`${user.name} disconnected.`);
     });
 });
 
