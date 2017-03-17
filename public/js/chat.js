@@ -101,7 +101,6 @@ document.getElementById('message-btn').addEventListener('click', function (e) {
     var messageTextbox = document.getElementsByName('message')[0];
     
     socket.emit('createMessage', {
-        from: 'User',
         text: messageTextbox.value
     }, function() {
         messageTextbox.value = '';
