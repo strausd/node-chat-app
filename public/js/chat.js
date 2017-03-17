@@ -23,10 +23,11 @@ function scrollToBottom () {
 
 socket.on('connect', function() {
     console.log('Connected to server');
-    var params = jQuery.deparam(window.location.search);
-    
+    // var params = jQuery.deparam(window.location.search);
+
     // Doesn't work with just spaces from window.location.search
     // var params = JSON.parse('{"' + decodeURI(window.location.search.substring(1).replace(/&/g, "\",\"").replace(/=/g, "\":\"")) + '"}');
+    var params = window.location.search;
     socket.emit('join', params, function (err) {
         if (err) {
             alert(err);

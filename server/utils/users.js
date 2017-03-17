@@ -28,6 +28,10 @@ class Users {
         var namesArray = users.map((user) => user.name);
         return namesArray;
     }
+    
+    getAllUserNames() {
+        return this.users.map((user) => user.name.toLowerCase());
+    }
 }
 
 module.exports = {Users};
