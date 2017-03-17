@@ -10,21 +10,41 @@ socket.on('disconnect', function() {
 
 socket.on('newMessage', function(message) {
     var formattedTime = moment(message.createdAt).format('h:mm a');
-    var li = document.createElement('LI');
-    li.innerHTML = `${message.from} ${formattedTime}: ${message.text}`;
-    document.querySelector('#messages').appendChild(li);
+    var template = document.getElementById('message-template').innerHTML;
+    var html = Mustache.render(template, {
+        text: message.text,
+        from: message.from,
+        createdAt: formattedTime
+    });
+    
+    document.querySelector('#messages').innerHTML += html;
+    
+    // var formattedTime = moment(message.createdAt).format('h:mm a');
+    // var li = document.createElement('LI');
+    // li.innerHTML = `${message.from} ${formattedTime}: ${message.text}`;
+    // document.querySelector('#messages').appendChild(li);
 });
 
 socket.on('newLocationMessage', function(message) {
     var formattedTime = moment(message.createdAt).format('h:mm a');
-    var li = document.createElement('LI');
-    var a = document.createElement('A');
-    a.setAttribute('target', '_blank');
-    a.setAttribute('href', message.url);
-    a.innerHTML = 'My current location';
-    li.innerHTML = `${message.from} ${formattedTime}: `;
-    li.appendChild(a);
-    document.querySelector('#messages').appendChild(li);
+    var template = document.getElementById('location-message-template').innerHTML;
+    var html = Mustache.render(template, {
+        from: message.from,
+        url: message.url,
+        createdAt: formattedTime
+    });
+    
+    document.querySelector('#messages').innerHTML += html;
+
+    // var formattedTime = moment(message.createdAt).format('h:mm a');
+    // var li = document.createElement('LI');
+    // var a = document.createElement('A');
+    // a.setAttribute('target', '_blank');
+    // a.setAttribute('href', message.url);
+    // a.innerHTML = 'My current location';
+    // li.innerHTML = `${message.from} ${formattedTime}: `;
+    // li.appendChild(a);
+    // document.querySelector('#messages').appendChild(li);
 });
 
 document.getElementById('message-btn').addEventListener('click', function (e) {
